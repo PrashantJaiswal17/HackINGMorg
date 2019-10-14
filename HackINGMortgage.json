@@ -1,0 +1,267 @@
+swagger: '2.0'
+info:
+  description: This is a simple API
+  version: 1.0.0
+  title: Simple Banking Loan Project 
+  # Consuming Open Bank APIs related to Account functionalities 
+  contact:
+    email: falcon@hcl-ing-hackathon.com
+
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+# tags are used for organizing operations
+tags:
+- name: Account
+  description: Create accounts and gets the account summaries
+- name: Users
+  description: To create and retrieve the user accounts
+
+paths:
+  /accountsummary/{accountNo}:
+    get:
+      tags:
+      - account 
+      summary: Get account summaries against provided account number
+      operationId: getAccountSummary
+      description: |
+       Get the account summary against the provided account number
+      produces:
+      - application/json
+      parameters:
+      - in: path   
+        name: accountNo
+        description: "provide the account no"
+        required: true
+        type: string
+      responses:
+        200:
+          description: accounts summaries in detail
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Account'
+        400:
+          description: bad input parameter
+    
+  /accounts:
+    post:
+      tags:
+      - account
+      summary: create a new account
+      operationId: createNewAccount
+      description: create a new account in a bank
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: account
+        description: Add a new account
+        schema:
+          $ref: '#/definitions/Account'
+      responses:
+        201:
+          description: account created
+        400:
+          description: invalid input, object invalid
+        409:
+          description: an existing account already exists
+
+  /users:
+    post:
+      tags:
+      - user
+      summary: To create new user
+      operationId: createNewUser
+      description: To create a new user 
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: user
+        description: User details
+        schema:
+          $ref: '#/definitions/User'
+      responses:
+        201:
+          description: User created successfully
+        400:
+          description: invalid input, object invalid
+        409:
+          description: An existing account already exists 
+  /login:
+    get:
+      tags:
+      - login
+      summary: To login 
+      operationId: doLogin
+      description: To login to the application 
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: user
+        description: User credentials
+        schema:
+          $ref: '#/definitions/UserCredential'
+      responses:
+        200:
+          description: Gets token
+          schema:
+            type: string
+            format: uuid
+            example: 'web-tokens-1'
+        400:
+          description: Invalid username/password supplied.
+        404:
+          description: User not found.
+          
+definitions:
+  Account:
+    type: object
+    required:
+    - id
+    - userId
+    - accountType
+    - amount
+    - currency
+    - createdDate
+    - employers
+    - assets
+    properties:
+      id:
+        type: string
+        format: uuid
+        example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      userId:
+        type: string
+        example: Falcon
+      accountType:
+        type: string
+        example: Mortgage  
+      currency:
+        type: string
+        example: EUR          
+      createdDate:
+        type: string
+        format: date-time
+        example: "2019-08-29T09:12:33.001Z"
+      assets:
+        type: array
+        items: 
+          $ref: '#/definitions/Asset' 
+      employers:
+        type: array
+        items: 
+          $ref: '#/definitions/Employer'     
+          
+  Employer:
+    type: object
+    required:
+    - id
+    - employerName
+    - fromDate
+    - netIncome
+    properties:
+      id:
+        type: string
+        format: uuid
+        example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      employerName:
+        type: string
+        example: HCL Tech
+      fromDate:
+        type: string
+        format: date-time
+        example: "2019-08-29T09:12:33.001Z"      
+      toDate:
+        type: string
+        format: date-time
+        example: "2019-08-29T09:12:33.001Z"              
+      netIncome:
+        type: string
+        example: '2000.00 INR'   
+        
+  Asset:
+    type: object
+    required:
+    - id
+    - ownerId
+    - fromDate
+    - longitude
+    - latitude
+    - type
+    - estimationValue
+    properties:
+      id:
+        type: string
+        example: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
+      ownerId:
+        type: string
+        example: Falcon_Asset
+      longitude:
+        type: string
+        example: longitude  
+      latitude:
+        type: string
+        example: latitude          
+      type:
+        type: string
+        example: Commercial          
+      estimationValue:
+        type: string
+        format: "xxx yyy.00"
+        example: "200 000.00"   
+        
+       
+          
+  User:
+    type: object
+    required:
+    - id
+    - firstName
+    - lastName
+    - email
+    - password
+    properties:
+      id:
+        type: string
+        format: uuid
+        example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      firstName:
+        type: string
+        example: Falcon
+      LastName:
+        type: string
+        example: Jaiswal  
+      email:
+        type: string
+        example: "falcon-hackathon@hcl.com"
+      password:
+        type: string
+        example: "XXAAAYY1235"  
+  UserCredential:
+    type: object
+    required:
+    - userId
+    - password
+    properties:
+      userId:
+        type: string
+        example: Falcon17
+      password:
+        type: string
+        example: Falcon17
+        
+# Added by API Auto Mocking Plugin
+host: virtserver.swaggerhub.com
+basePath: /PrashantJaiswal17/MyTestAccount/1.0.0
+schemes:
+ - https
