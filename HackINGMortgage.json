@@ -2,7 +2,7 @@ swagger: '2.0'
 info:
   description: This is a simple API
   version: 1.0.0
-  title: Simple Banking Loan Project 
+  title: Mortgage APIs Definitions  
   # Consuming Open Bank APIs related to Account functionalities 
   contact:
     email: falcon@hcl-ing-hackathon.com
